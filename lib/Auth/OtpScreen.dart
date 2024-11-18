@@ -41,28 +41,73 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Future<void> updatePhoneNumber() async {
-    final url = Uri.parse('http://145.223.21.62:8090/api/collections/users/records');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'phonenumber': int.parse(widget.phoneNumber.replaceAll('+', '')),
-      }),
-    );
+    try {
+      // First, check if the phone number already exists
+      final checkUrl = Uri.parse('http://145.223.21.62:8090/api/collections/users/records');
+      final phoneNumberInt = int.parse(widget.phoneNumber.replaceAll('+', ''));
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      String userId = responseData['id'];
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userId', userId);
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ProfileCreationScreen(userId: userId)),
+      final checkResponse = await http.get(
+        Uri.parse('${checkUrl.toString()}?filter=(phonenumber=${phoneNumberInt})'),
+        headers: {'Content-Type': 'application/json'},
       );
-    } else {
+
+      if (checkResponse.statusCode == 200) {
+        final checkData = json.decode(checkResponse.body);
+
+        // If phone number exists
+        if (checkData['items'] != null && checkData['items'].length > 0) {
+          final existingUser = checkData['items'][0];
+          final existingUserId = existingUser['id'];
+
+          // Save existing user ID to SharedPreferences
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('userId', existingUserId);
+
+          // Navigate to appropriate screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfileCreationScreen(userId: existingUserId)
+            ),
+          );
+          return;
+        }
+      }
+
+      // If phone number doesn't exist, create new user
+      final createResponse = await http.post(
+        checkUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'phonenumber': phoneNumberInt,
+        }),
+      );
+
+      if (createResponse.statusCode == 200) {
+        final responseData = json.decode(createResponse.body);
+        String userId = responseData['id'];
+
+        // Save new user ID to SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userId', userId);
+
+        // Navigate to profile creation
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileCreationScreen(userId: userId)
+          ),
+        );
+      } else {
+        throw Exception('Failed to create user');
+      }
+    } catch (e) {
+      print('Error updating phone number: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update phone number. Please try again.')),
+        SnackBar(
+          content: Text('Failed to update phone number. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

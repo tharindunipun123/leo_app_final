@@ -1,6 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'live_page.dart';
 import 'voiceRoomCreate.dart';
+
+// Model class for Voice Room remains the same
+class VoiceRoom {
+  final String id;
+  final String voiceRoomName;
+  final int voiceRoomId;
+  final String ownerId;
+  final String voiceRoomCountry;
+  final String teamMoto;
+  final String groupPhoto;
+  final String tags;
+  final String backgroundImages;
+
+  VoiceRoom({
+    required this.id,
+    required this.voiceRoomName,
+    required this.voiceRoomId,
+    required this.ownerId,
+    required this.voiceRoomCountry,
+    required this.teamMoto,
+    required this.groupPhoto,
+    required this.tags,
+    required this.backgroundImages,
+  });
+
+  factory VoiceRoom.fromJson(Map<String, dynamic> json) {
+    return VoiceRoom(
+      id: json['id'],
+      voiceRoomName: json['voice_room_name'],
+      voiceRoomId: json['voiceRoom_id'],
+      ownerId: json['ownerId'],
+      voiceRoomCountry: json['voiceRoom_country'],
+      teamMoto: json['team_moto'],
+      groupPhoto: json['group_photo'],
+      tags: json['tags'],
+      backgroundImages: json['background_images'],
+    );
+  }
+}
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -9,18 +52,59 @@ class GroupsScreen extends StatefulWidget {
 
 class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<String> _tabs = ["My Groups", "Hot", "Global"];
+  final List<String> _tabs = ["Mine", "Hot"];
+  List<VoiceRoom> _voiceRooms = [];
+  String? _userId;
+  String? _username;
+  bool _isLoading = true;
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
+    _loadUserData();
+    _fetchVoiceRooms();
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userId = prefs.getString('userId');
+      _username = prefs.getString('firstName');
+    });
+  }
+
+  Future<void> _fetchVoiceRooms() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://145.223.21.62:8090/api/collections/voiceRooms/records'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final items = data['items'] as List;
+        setState(() {
+          _voiceRooms = items.map((item) => VoiceRoom.fromJson(item)).toList();
+          _isLoading = false;
+        });
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      print('Error fetching voice rooms: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _navigateToCreateRoom() {
+    // TODO: Implement navigation to create room page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateVoiceRoomPage(), // Replace with your CreateRoomPage
+      ),
+    );
   }
 
   @override
@@ -29,7 +113,9 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(),
+            _buildSearchBar(),
+            _buildAdvertBanner(),
+
             TabBar(
               controller: _tabController,
               tabs: _tabs.map((String name) => Tab(text: name)).toList(),
@@ -41,9 +127,8 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildVoiceRoomsGrid(),
-                  _buildHotPage(),
-                  _buildGlobalPage(),
+                  _buildVoiceRoomsList(true),
+                  _buildVoiceRoomsList(false),
                 ],
               ),
             ),
@@ -51,193 +136,208 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Implement create room functionality
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreateVoiceRoomPage()),
-          );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue[700],
+        onPressed: _navigateToCreateRoom,
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildSearchBar() {
     return Container(
       padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blue[400]!, Colors.blue[800]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+      color: Colors.lightBlue[50],
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Search voice rooms...',
+          prefixIcon: Icon(Icons.search, color: Colors.blue),
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Voice Rooms',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // TODO: Implement search functionality
-            },
-          ),
-        ],
+    );
+  }
+
+  Widget _buildAdvertBanner() {
+    return Container(
+      height: 100,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        image: DecorationImage(
+          image: NetworkImage('https://picsum.photos/800/200'),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
 
-  Widget _buildVoiceRoomsGrid() {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: MasonryGridView.count(
-        crossAxisCount: 2,
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) => _buildRoomCard(),
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-      ),
+  // Widget _buildRankingSection() {
+  //   return Container(
+  //     padding: EdgeInsets.all(16),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: [
+  //
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget _buildRankingCategory(String title) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blue[700],
+          ),
+        ),
+        SizedBox(height: 8),
+        Row(
+          children: List.generate(
+            3,
+                (index) => Padding(
+              padding: EdgeInsets.symmetric(horizontal: 2),
+              child: CircleAvatar(
+                radius: 15,
+                backgroundImage: NetworkImage('https://picsum.photos/50/50?random=$index'),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildRoomCard() {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            child: Image.network(
-              'https://picsum.photos/seed/${DateTime.now().millisecondsSinceEpoch}/300/200',
-              fit: BoxFit.cover,
-              height: 120,
-              width: double.infinity,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Music Lovers',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.location_on, size: 16, color: Colors.grey),
-                    SizedBox(width: 4),
-                    Text('USA', style: TextStyle(color: Colors.grey)),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.people, size: 16, color: Colors.grey),
-                    SizedBox(width: 4),
-                    Text('128 members', style: TextStyle(color: Colors.grey)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildVoiceRoomsList(bool isMineTab) {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator(color: Colors.blue));
+    }
 
-  Widget _buildHotPage() {
+    final filteredRooms = isMineTab
+        ? _voiceRooms.where((room) => room.ownerId == _userId).toList()
+        : _voiceRooms;
+
     return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Card(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage('https://picsum.photos/seed/${index + 100}/100'),
-            ),
-            title: Text('Hot Room ${index + 1}'),
-            subtitle: Text('Trending discussion topic'),
-            trailing: Chip(
-              label: Text('${1000 - index * 50}+'),
-              backgroundColor: Colors.red[100],
-              labelStyle: TextStyle(color: Colors.red),
-            ),
-          ),
-        );
-      },
+      padding: EdgeInsets.all(16),
+      itemCount: filteredRooms.length,
+      itemBuilder: (context, index) => _buildRoomCard(filteredRooms[index]),
     );
   }
 
-  Widget _buildGlobalPage() {
-    return GridView.builder(
-      padding: EdgeInsets.all(16),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+  Widget _buildRoomCard(VoiceRoom room) {
+    return Card(
+      margin: EdgeInsets.only(bottom: 16),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () => _navigateToLivePage(room),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              child: CachedNetworkImage(
+                imageUrl: 'http://145.223.21.62:8090/api/files/voiceRooms/${room.id}/${room.groupPhoto}',
+                height: 150,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  height: 150,
+                  color: Colors.grey[200],
+                  child: Center(child: CircularProgressIndicator(color: Colors.blue)),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: 150,
+                  color: Colors.grey[200],
+                  child: Icon(Icons.error, color: Colors.blue),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        room.voiceRoomName,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Text('ID: ${room.voiceRoomId}'),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, size: 16, color: Colors.blue),
+                      SizedBox(width: 4),
+                      Text(room.voiceRoomCountry),
+                      Spacer(),
+                      _buildTags(room.tags),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    room.teamMoto,
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.network(
-                  'https://picsum.photos/seed/${index + 200}/300/200',
-                  fit: BoxFit.cover,
-                  height: 100,
-                  width: double.infinity,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Global Room ${index + 1}',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'International chat',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.public, size: 16, color: Colors.blue),
-                        SizedBox(width: 4),
-                        Text('${index + 5} countries', style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
+  }
+
+  Widget _buildTags(String tags) {
+    final tagsList = tags.split(',');
+    return Row(
+      children: tagsList.map((tag) =>
+          Container(
+            margin: EdgeInsets.only(left: 4),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.lightBlue[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              tag.trim(),
+              style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+            ),
+          ),
+      ).toList(),
+    );
+  }
+
+  void _navigateToLivePage(VoiceRoom room) {
+    final isHost = room.ownerId == _userId;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LivePage(
+          roomID: room.id,
+          isHost: isHost,
+          username1: _username ?? '',
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 }

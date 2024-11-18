@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 GButton(
                   icon: LineIcons.users,
-                  text: 'Group',
+                  text: 'Rooms',
                 ),
                 GButton(
                   icon: LineIcons.gamepad,
@@ -203,12 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-class GroupsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Groups Screen'));
-  }
-}
 
 class GameScreen extends StatelessWidget {
   @override

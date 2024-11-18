@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'HomePagePopMenu.dart';
+import 'Status.dart'; // Import the status screen
 
 // Global navigator key for handling call invitations
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -17,12 +18,29 @@ class ChatScreen1 extends StatefulWidget {
   ChatScreen1State createState() => ChatScreen1State();
 }
 
-class ChatScreen1State extends State<ChatScreen1> {
+class ChatScreen1State extends State<ChatScreen1> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
     _initializeZegoCloud();
     _fetchAndSetUserAvatar();
+  }
+
+  void _handleTabChange() {
+    if (_tabController.indexIsChanging) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
+    super.dispose();
   }
 
   Future<void> _initializeZegoCloud() async {
@@ -33,13 +51,11 @@ class ChatScreen1State extends State<ChatScreen1> {
 
       if (userId.isEmpty) return;
 
-      // Set the navigator key for handling call invitations
       ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
 
-      // Initialize the call service
       await ZegoUIKitPrebuiltCallInvitationService().init(
-        appID: 1382376685, // Your Zego Cloud AppID
-        appSign: '0a9bce0b90584625b087d27e8e3c9a2a15ea28eb16119022da829f87c3763142', // Your Zego Cloud AppSign
+        appID: 1382376685,
+        appSign: '0a9bce0b90584625b087d27e8e3c9a2a15ea28eb16119022da829f87c3763142',
         userID: userId,
         userName: userName,
         plugins: [ZegoUIKitSignalingPlugin()],
@@ -55,12 +71,10 @@ class ChatScreen1State extends State<ChatScreen1> {
           ),
         ),
         requireConfig: (ZegoCallInvitationData data) {
-          // Configure call UI based on call type
           final config = data.type == ZegoCallInvitationType.videoCall
               ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
               : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
 
-          // Additional call UI configurations
           config.audioVideoViewConfig
             ..useVideoViewAspectFill = true;
 
@@ -102,55 +116,125 @@ class ChatScreen1State extends State<ChatScreen1> {
     }
   }
 
+  Widget _buildChatTab() {
+    return ZIMKitConversationListView(
+      onPressed: (context, conversation, defaultAction) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ZIMKitMessageListPage(
+              conversationID: conversation.id,
+              conversationType: conversation.type,
+              appBarActions: conversation.type == ZIMConversationType.peer
+                  ? [
+                ZegoSendCallInvitationButton(
+                  isVideoCall: true,
+                  resourceID: 'zego_data',
+                  invitees: [
+                    ZegoUIKitUser(
+                      id: conversation.id,
+                      name: conversation.name,
+                    ),
+                  ],
+                ),
+                ZegoSendCallInvitationButton(
+                  isVideoCall: false,
+                  resourceID: 'zego_data',
+                  invitees: [
+                    ZegoUIKitUser(
+                      id: conversation.id,
+                      name: conversation.name,
+                    ),
+                  ],
+                ),
+              ]
+                  : null,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatusPage() {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      transitionBuilder: (child, animation) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+      child: StatusPage(), // Your StatusPage widget
+    );
+  }
+
+  void _handleFABPressed() {
+    const HomePagePopupMenuButton();
+    // if (_tabController.index == 0) {
+    //   // Handle chat FAB press
+    // } else {
+    //   // Handle status FAB press
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey, // Important for call handling
+      navigatorKey: navigatorKey,
+      theme: ThemeData(
+        primaryColor: Colors.blue[700],
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: Colors.blue[700],
+        ),
+      ),
       home: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text('Conversations'),
-            actions: const [HomePagePopupMenuButton()],
+            elevation: 0,
+            backgroundColor: Colors.white,
+            title: Text(
+              'Messages',
+              style: TextStyle(
+                color: Colors.blue[700],
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+            actions: [
+              // IconButton(
+              //   icon: Icon(Icons.search, color: Colors.blue[700]),
+              //   onPressed: () {},
+              // ),
+              const HomePagePopupMenuButton(),
+            ],
+            bottom: TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.blue[700],
+              labelColor: Colors.blue[700],
+              unselectedLabelColor: Colors.grey,
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+              tabs: const [
+                Tab(text: 'CHATS'),
+                Tab(text: 'STATUS'),
+              ],
+            ),
           ),
-          body: ZIMKitConversationListView(
-            onPressed: (context, conversation, defaultAction) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ZIMKitMessageListPage(
-                    conversationID: conversation.id,
-                    conversationType: conversation.type,
-                    appBarActions: conversation.type == ZIMConversationType.peer
-                        ? [
-                      // Video Call Button
-                      ZegoSendCallInvitationButton(
-                        isVideoCall: true,
-                        resourceID: 'zego_data',
-                        invitees: [
-                          ZegoUIKitUser(
-                            id: conversation.id,
-                            name: conversation.name,
-                          ),
-                        ],
-                      ),
-                      // Voice Call Button
-                      ZegoSendCallInvitationButton(
-                        isVideoCall: false,
-                        resourceID: 'zego_data',
-                        invitees: [
-                          ZegoUIKitUser(
-                            id: conversation.id,
-                            name: conversation.name,
-                          ),
-                        ],
-                      ),
-                    ]
-                        : null,
-                  ),
-                ),
-              );
-            },
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildChatTab(),
+              _buildStatusPage(),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _handleFABPressed,
+            backgroundColor: Colors.blue[700],
+            child: Icon(
+              _tabController.index == 0 ? Icons.chat : Icons.camera_alt,
+            ),
           ),
         ),
       ),

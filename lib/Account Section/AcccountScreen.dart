@@ -6,6 +6,7 @@ import 'package:leo_app_01/Account%20Section/profileUpdate.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'wallet.dart';
+import 'Myitems.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -92,11 +93,17 @@ class _AccountScreenState extends State<AccountScreen> {
                 FontAwesomeIcons.chartLine,
                     () => _navigateToLevel(context),
               ),
+              // _buildFeatureCard(
+              //   context,
+              //   'Nobel',
+              //   FontAwesomeIcons.crown,
+              //       () => _navigateToNobel(context),
+              // ),
               _buildFeatureCard(
                 context,
-                'Nobel',
+                'My Items',
                 FontAwesomeIcons.crown,
-                    () => _navigateToNobel(context),
+                    () => _navigateToItems(context),
               ),
               _buildFeatureCard(
                 context,
@@ -144,22 +151,39 @@ class _AccountScreenState extends State<AccountScreen> {
     }
 
     return Card(
-      margin: const EdgeInsets.all(8.0),
-      elevation: 4.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      margin: const EdgeInsets.all(12.0),
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
             Hero(
               tag: 'profileAvatar',
-              child: CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
-                child: avatarUrl == null
-                    ? const Icon(Icons.person, size: 40, color: Colors.grey)
-                    : null,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.grey[200],
+                  backgroundImage: avatarUrl != null
+                      ? NetworkImage(avatarUrl)
+                      : null,
+                  child: avatarUrl == null
+                      ? const Icon(Icons.person, size: 40, color: Colors.grey)
+                      : null,
+                ),
               ),
             ),
             const SizedBox(width: 16.0),
@@ -169,12 +193,19 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Text(
                     userData?['firstname'] ?? 'User',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
                     userData?['moto'] ?? 'No motto set',
-                    style: TextStyle(color: Colors.grey[600]),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -186,33 +217,53 @@ class _AccountScreenState extends State<AccountScreen> {
               children: [
                 ElevatedButton.icon(
                   onPressed: () => _navigateToViewProfile(context),
-                  icon: const FaIcon(FontAwesomeIcons.eye, size: 16),
-                  label: const Text('View'),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.eye,
+                    size: 16,
+                  ),
+                  label: const Text(
+                    'View',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[700],
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                      horizontal: 20,
+                      vertical: 10,
                     ),
+                    elevation: 4,
                   ),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton.icon(
                   onPressed: () => _navigateToEditProfile(context),
-                  icon: const FaIcon(FontAwesomeIcons.pen, size: 16),
-                  label: const Text('Edit'),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.pen,
+                    size: 16,
+                  ),
+                  label: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[700],
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                      horizontal: 20,
+                      vertical: 10,
                     ),
+                    elevation: 4,
                   ),
                 ),
               ],
@@ -289,6 +340,11 @@ class _AccountScreenState extends State<AccountScreen> {
       context,
       MaterialPageRoute(builder: (context) => WalletScreen(userId: userId,)),
     );
+  }
+
+  void _navigateToItems(BuildContext context) {
+    // Navigate to Nobel screen
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MyItemsPage()));
   }
 
   void _navigateToLevel(BuildContext context) {

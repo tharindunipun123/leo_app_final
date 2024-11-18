@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ZEGOCLOUD Chat App',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: StartScreen(),
@@ -100,6 +101,7 @@ class ZIMKitDemoHomePage extends StatelessWidget {
     );
   }
 }
+
 
 class HomePagePopupMenuButton extends StatefulWidget {
   const HomePagePopupMenuButton({Key? key}) : super(key: key);

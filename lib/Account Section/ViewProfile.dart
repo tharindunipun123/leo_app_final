@@ -69,7 +69,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildUserInfo(),
+                //_buildUserInfo(),
                 const SizedBox(height: 24),
                 _buildBadgesSection(),
                 const SizedBox(height: 24),
@@ -143,35 +143,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
     );
   }
 
-  Widget _buildUserInfo() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'About',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              _userData?['bio'] ?? 'No bio available',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildBadgesSection() {
     final List badges = _userData?['badges'] ?? [];

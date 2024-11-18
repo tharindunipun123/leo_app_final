@@ -90,7 +90,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.blue[700],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -109,7 +109,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                       ? Icon(
                     Icons.add_a_photo,
                     size: 50,
-                    color: Colors.deepPurple,
+                    color: Colors.blue[700],
                   )
                       : null,
                 ),
@@ -128,15 +128,15 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                 controller: _firstNameController,
                 decoration: InputDecoration(
                   labelText: 'First Name',
-                  labelStyle: TextStyle(color: Colors.deepPurple),
+                  labelStyle: TextStyle(color: Colors.blue[700]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepPurple),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  prefixIcon: Icon(Icons.person, color: Colors.deepPurple),
+                  prefixIcon: Icon(Icons.person, color: Colors.blue[700]),
                 ),
               ),
               SizedBox(height: 16),
@@ -144,15 +144,15 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                 controller: _lastNameController,
                 decoration: InputDecoration(
                   labelText: 'Last Name',
-                  labelStyle: TextStyle(color: Colors.deepPurple),
+                  labelStyle: TextStyle(color: Colors.blue[700]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepPurple),
+                    borderSide: BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  prefixIcon: Icon(Icons.person_outline, color: Colors.deepPurple),
+                  prefixIcon: Icon(Icons.person_outline, color: Colors.blue[700]),
                 ),
               ),
               SizedBox(height: 30),
@@ -160,7 +160,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                 onPressed: saveProfile,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: Colors.blue[700],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'ViewProfile.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String userId;
@@ -18,6 +17,11 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
+
+  // Custom Colors
+  final Color primaryBlue = const Color(0xFF2196F3);
+  final Color lightBlue = const Color(0xFFE3F2FD);
+  final Color darkBlue = const Color(0xFF1565C0);
 
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
@@ -64,11 +68,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _avatarFile = File(image.path);
-      });
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
+      if (image != null) {
+        setState(() {
+          _avatarFile = File(image.path);
+        });
+      }
+    } catch (e) {
+      _showErrorSnackBar('Failed to pick image');
     }
   }
 
@@ -83,13 +94,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         Uri.parse('http://145.223.21.62:8090/api/collections/users/records/${widget.userId}'),
       );
 
-      // Add text fields
       request.fields['firstname'] = _firstNameController.text;
       request.fields['lastname'] = _lastNameController.text;
       request.fields['moto'] = _motoController.text;
       request.fields['bio'] = _bioController.text;
 
-      // Add avatar if selected
       if (_avatarFile != null) {
         request.files.add(await http.MultipartFile.fromPath(
           'avatar',
@@ -100,7 +109,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final response = await request.send();
 
       if (response.statusCode == 200) {
-        // Update firstname in SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('firstName', _firstNameController.text);
 
@@ -122,7 +130,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[400],
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }
@@ -131,7 +143,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[400],
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }
@@ -139,92 +155,144 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: lightBlue,
       appBar: AppBar(
         title: const Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.black87),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: primaryBlue,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(primaryBlue),
+        ),
+      )
           : SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
+        child: Stack(
+          children: [
+            Column(
               children: [
-                const SizedBox(height: 20),
-                _buildAvatarSection(),
-                const SizedBox(height: 30),
-                _buildInputFields(),
-                const SizedBox(height: 40),
-                _buildUpdateButton(),
+                _buildHeaderCurve(),
+                const SizedBox(height: 60), // Add space for avatar overflow
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        _buildInputFields(),
+                        const SizedBox(height: 40),
+                        _buildUpdateButton(),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
+            Positioned(
+              top: 40, // Adjust this value to position the avatar
+              left: 0,
+              right: 0,
+              child: _buildAvatarSection(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderCurve() {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: primaryBlue,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
         ),
       ),
     );
   }
 
   Widget _buildAvatarSection() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.grey[200],
-            image: _avatarFile != null
-                ? DecorationImage(
-              image: FileImage(_avatarFile!),
-              fit: BoxFit.cover,
-            )
-                : _currentAvatarUrl != null
-                ? DecorationImage(
-              image: NetworkImage(_currentAvatarUrl!),
-              fit: BoxFit.cover,
-            )
+    return SizedBox(
+      height: 120,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              border: Border.all(color: Colors.white, width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+              image: _avatarFile != null
+                  ? DecorationImage(
+                image: FileImage(_avatarFile!),
+                fit: BoxFit.cover,
+              )
+                  : _currentAvatarUrl != null
+                  ? DecorationImage(
+                image: NetworkImage(_currentAvatarUrl!),
+                fit: BoxFit.cover,
+              )
+                  : null,
+            ),
+            child: _avatarFile == null && _currentAvatarUrl == null
+                ? Icon(Icons.person, size: 60, color: primaryBlue)
                 : null,
           ),
-          child: _avatarFile == null && _currentAvatarUrl == null
-              ? const Icon(Icons.person, size: 60, color: Colors.grey)
-              : null,
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Material(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(50),
-            child: InkWell(
-              onTap: _pickImage,
+          Positioned(
+            bottom: 0,
+            right: (MediaQuery.of(context).size.width - 120) / 2 - 15,
+            child: Material(
+              color: darkBlue,
               borderRadius: BorderRadius.circular(50),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                child: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                  size: 20,
+              child: InkWell(
+                onTap: _pickImage,
+                borderRadius: BorderRadius.circular(50),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+
 
   Widget _buildInputFields() {
     return Column(
@@ -280,13 +348,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -294,48 +362,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         controller: controller,
         validator: validator,
         maxLines: maxLines,
+        style: TextStyle(color: darkBlue),
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon, color: Colors.grey),
+          labelStyle: TextStyle(color: primaryBlue),
+          prefixIcon: Icon(icon, color: primaryBlue),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: primaryBlue, width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: primaryBlue.withOpacity(0.3), width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: primaryBlue, width: 2),
           ),
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
     );
   }
 
   Widget _buildUpdateButton() {
-    return SizedBox(
+    return Container(
       width: double.infinity,
-      height: 50,
+      height: 55,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: primaryBlue.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: ElevatedButton(
         onPressed: _isLoading ? null : _updateProfile,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: primaryBlue,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
           ),
-          elevation: 2,
+          elevation: 0,
         ),
         child: _isLoading
             ? const SizedBox(
-          width: 20,
-          height: 20,
+          width: 24,
+          height: 24,
           child: CircularProgressIndicator(
-            strokeWidth: 2,
+            strokeWidth: 2.5,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         )
             : const Text(
           'Update Profile',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
           ),
         ),
       ),

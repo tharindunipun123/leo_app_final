@@ -35,7 +35,7 @@ class StartScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Welcome to ModernChat',
+                      'Welcome to Leo Chat',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class StartScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
-                  '© 2024 ModernChat',
+                  '© 2024 Leo Chat',
                   style: TextStyle(color: Colors.white70),
                 ),
               ),
