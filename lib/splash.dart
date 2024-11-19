@@ -20,6 +20,19 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   void initState() {
     super.initState();
 
+    // Initialize animations
+    _setupAnimations();
+
+    // Start animation sequence and check auth state
+    _startAnimationSequence();
+
+    // Check user authentication after showing splash for 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      checkAuthState();
+    });
+  }
+
+  void _setupAnimations() {
     // Initialize fade controller
     _fadeController = AnimationController(
       vsync: this,
@@ -50,39 +63,28 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       parent: _scaleController,
       curve: Curves.easeOutBack,
     ));
-
-    // Start animations sequence
-    _startAnimationSequence();
-
-    // Check shared preferences after animations
-    Future.delayed(const Duration(seconds: 3), () {
-      checkUserData();
-    });
   }
 
   void _startAnimationSequence() async {
-    // Start fade in and scale up
     await Future.wait([
       _fadeController.forward(),
       _scaleController.forward(),
     ]);
-
-    // Wait for a moment
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Fade out
+    await Future.delayed(const Duration(milliseconds: 500));
     await _fadeController.reverse();
   }
 
-  Future<void> checkUserData() async {
+  Future<void> checkAuthState() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    // Get stored user data
     final String? userId = prefs.getString('userId');
     final String? firstname = prefs.getString('firstName');
 
     if (!mounted) return;
 
     if (userId != null && firstname != null) {
+      // User is logged in, navigate to HomeScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -93,6 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         ),
       );
     } else {
+      // User is not logged in, navigate to StartScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -118,15 +121,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withOpacity(0.8),
+              Color(0xFF00F5D4), // Matching your start screen gradient
+              Color(0xFF0086FF),
             ],
           ),
         ),
         child: SafeArea(
           child: Stack(
             children: [
-              // Main content
               Center(
                 child: FadeTransition(
                   opacity: _fadeAnimation,
@@ -153,32 +155,25 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset(
-                              'assets/images/logo.png', // Add your logo image here
+                              'assets/chat.png', // Using your chat logo
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         const SizedBox(height: 30),
-                        // App Name with custom font
                         Text(
-                          'Your App Name',
+                          'Leo Chat',
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1.5,
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        // Loading Indicator
-                        const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              // Copyright text at bottom
               Positioned(
                 left: 0,
                 right: 0,

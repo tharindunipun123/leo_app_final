@@ -61,9 +61,11 @@ class StartScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => PhoneNumberScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => PhoneNumberScreen()
+                          ),
                         );
                       },
                       child: Text(
