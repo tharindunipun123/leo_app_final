@@ -75,16 +75,16 @@ class _ZegoGiftSheetState extends State<ZegoGiftSheet> {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            countDropList(),
-            SizedBox(
-              height: 30,
-              child: sendButton(),
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: [
+        //     countDropList(),
+        //     SizedBox(
+        //       height: 30,
+        //       child: sendButton(),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

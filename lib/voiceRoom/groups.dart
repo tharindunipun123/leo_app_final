@@ -329,6 +329,7 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
           roomID: room.id,
           isHost: isHost,
           username1: _username ?? '',
+          userId: _userId!,
         ),
       ),
     );

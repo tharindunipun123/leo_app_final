@@ -26,7 +26,7 @@ class ErrorScreen extends StatelessWidget {
                 color: Colors.red.shade700, // Error message color
               ),
             ),
-// tharindu20005 mama ayye ddn keeparak oyata kiiwwwada meka karanna ba kiyala
+
 ],
         ),
       ),

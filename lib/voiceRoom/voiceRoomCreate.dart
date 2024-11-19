@@ -138,6 +138,7 @@ class _CreateVoiceRoomPageState extends State<CreateVoiceRoomPage> {
         // Get username for LivePage
         final prefs = await SharedPreferences.getInstance();
         final username = prefs.getString('firstName') ?? '';
+        final userId = prefs.getString('userId') ?? '';
 
         // Navigate to LivePage with the correct parameters
         if (!mounted) return;
@@ -149,6 +150,8 @@ class _CreateVoiceRoomPageState extends State<CreateVoiceRoomPage> {
               roomID: data['id'],
               isHost: true,
               username1: username,
+              userId: userId,
+
             ),
           ),
         );

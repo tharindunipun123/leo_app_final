@@ -165,8 +165,8 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
                                   // Check if OTP was sent successfully
                                   if (responseData.contains('"status":"success"')) {
-                                    // Navigate to OTP screen on success
-                                    Navigator.push(
+
+                                    Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => OtpScreen(
@@ -175,6 +175,16 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                         ),
                                       ),
                                     );
+                                    // Navigate to OTP screen on success
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => OtpScreen(
+                                    //       phoneNumber: fullPhoneNumber,
+                                    //       otp: otp,
+                                    //     ),
+                                    //   ),
+                                    // );
                                   } else {
                                     // Display error if OTP failed to send
                                     ScaffoldMessenger.of(context).showSnackBar(

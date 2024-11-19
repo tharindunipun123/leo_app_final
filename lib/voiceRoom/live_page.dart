@@ -17,13 +17,14 @@ class LivePage extends StatefulWidget {
   final bool isHost;
   final LayoutMode layoutMode;
   final String username1;
+  final String userId;
 
   const LivePage({
     Key? key,
     required this.roomID,
     this.layoutMode = LayoutMode.defaultLayout,
     this.isHost = false,
-    required this.username1
+    required this.username1, required this.userId
   }) : super(key: key);
 
   @override
@@ -69,7 +70,7 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
     try {
       final uri = Uri.parse('$POCKETBASE_URL/api/collections/users/records')
           .replace(queryParameters: {
-        'filter': 'id="${widget.username1}"',
+        'filter': 'id="${widget.userId}"',
         'fields': 'id,avatar,collectionId',
       });
 
@@ -82,11 +83,15 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print('------------------------');
+        print(data);
         if (data['items'] != null && data['items'].isNotEmpty) {
           final userData = data['items'][0];
           if (userData['avatar'] != null) {
             setState(() {
               _userAvatarUrl = '$POCKETBASE_URL/api/files/${userData['collectionId']}/${userData['id']}/${userData['avatar']}';
+              print('------------------------');
+              print(_userAvatarUrl);
             });
           }
         }
@@ -427,7 +432,8 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
   ) {
     return CircleAvatar(
       maxRadius: size.width,
-      backgroundImage: Image.asset("assets/avatars/avatar_${((int.tryParse(user?.id ?? "") ?? 0) % 6)}.png").image,
+      //backgroundImage: Image.asset("assets/avatars/avatar_${((int.tryParse(user?.id ?? "") ?? 0) % 6)}.png").image,
+      backgroundImage: Image.network(_userAvatarUrl!).image,
     );
   }
 
