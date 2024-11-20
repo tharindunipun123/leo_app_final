@@ -11,7 +11,7 @@ void showNewChatDialog(BuildContext context) {
     useRootNavigator: false,
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('New Chat'),
+      title:  const Text('New Chat'),
       content: TextField(
         controller: userIDController,
         decoration: const InputDecoration(

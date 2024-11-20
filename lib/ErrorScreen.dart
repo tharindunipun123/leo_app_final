@@ -15,7 +15,7 @@ class ErrorScreen extends StatelessWidget {
             const CircularProgressIndicator(
               color: Colors.blue, // Optional customization of spinner color
             ),
-            const SizedBox(height: 20), // Space between spinner and message
+             const SizedBox(height: 20), // Space between spinner and message
             // Error Message
             Text(
               'Internal Server Error 500',

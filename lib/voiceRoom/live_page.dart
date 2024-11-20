@@ -35,7 +35,7 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
   late AnimationController _controller;
   late Animation<double> _glowAnimation;
   String? _userAvatarUrl;
-  String? _voiceRoomName;
+  String _voiceRoomName='.....';
   static const String POCKETBASE_URL = 'http://145.223.21.62:8090'; // Replace with your actual PocketBase URL
 
   @override
@@ -83,15 +83,11 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print('------------------------');
-        print(data);
         if (data['items'] != null && data['items'].isNotEmpty) {
           final userData = data['items'][0];
           if (userData['avatar'] != null) {
             setState(() {
               _userAvatarUrl = '$POCKETBASE_URL/api/files/${userData['collectionId']}/${userData['id']}/${userData['avatar']}';
-              print('------------------------');
-              print(_userAvatarUrl);
             });
           }
         }
@@ -417,6 +413,7 @@ class LivePageState extends State<LivePage> with SingleTickerProviderStateMixin 
   // }
 
   ZegoLiveAudioRoomSeatConfig getSeatConfig() {
+    _fetchVoiceRoomDetails();
     return ZegoLiveAudioRoomSeatConfig(
       backgroundBuilder: backgroundBuilder,
       foregroundBuilder: foregroundBuilder,

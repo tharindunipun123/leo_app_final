@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     // Initialize fade controller
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration:  const Duration(seconds: 2),
     );
 
     // Initialize scale controller

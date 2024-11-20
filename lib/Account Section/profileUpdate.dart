@@ -421,7 +421,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         )
-            : const Text(
+            :  const Text(
           'Update Profile',
           style: TextStyle(
             fontSize: 18,

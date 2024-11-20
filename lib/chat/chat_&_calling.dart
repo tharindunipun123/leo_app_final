@@ -158,7 +158,7 @@ class ChatScreen1State extends State<ChatScreen1> with SingleTickerProviderState
 
   Widget _buildStatusPage() {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
+      duration:  const Duration(milliseconds: 500),
       transitionBuilder: (child, animation) {
         return FadeTransition(opacity: animation, child: child);
       },

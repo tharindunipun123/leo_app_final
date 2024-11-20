@@ -60,7 +60,7 @@ class _AccountScreenState extends State<AccountScreen> {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
+              title:  const Text(
                 'My Account',
                 style: TextStyle(
                   color: Colors.white,
@@ -276,12 +276,12 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _buildFeatureCard(BuildContext context, String title, IconData icon, VoidCallback onPressed) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: ListTile(
         leading: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: Colors.blue[50],
             borderRadius: BorderRadius.circular(8.0),
@@ -289,7 +289,7 @@ class _AccountScreenState extends State<AccountScreen> {
           child: FaIcon(icon, color: Colors.blue[700], size: 20),
         ),
         title: Text(title),
-        trailing: Icon(Icons.chevron_right),
+        trailing: const Icon(Icons.chevron_right),
         onTap: onPressed,
       ),
     );
@@ -297,14 +297,14 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _buildLogoutButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         onPressed: () => _handleLogout(context),
-        child: Text('Logout'),
+        child: const Text('Logout'),
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
           backgroundColor: Colors.red,
-          padding: EdgeInsets.symmetric(vertical: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
@@ -319,7 +319,7 @@ class _AccountScreenState extends State<AccountScreen> {
     // Navigate to Edit Profile screen
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfileScreen(userId: 'd1k9aih2t9t9wo3',)),
+      MaterialPageRoute(builder: (context) => const EditProfileScreen(userId: 'd1k9aih2t9t9wo3',)),
     );
   }
 
@@ -380,17 +380,17 @@ class _AccountScreenState extends State<AccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to logout?'),
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Logout'),
+              child: const Text('Logout'),
               onPressed: () {
                 // Perform logout action
                 Navigator.of(context).pop();

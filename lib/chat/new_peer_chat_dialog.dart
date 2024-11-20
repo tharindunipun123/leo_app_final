@@ -67,7 +67,7 @@ void showDefaultNewPeerChatDialog(BuildContext context) {
       print('Error loading users: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Failed to load users. Please try again.'),
             backgroundColor: Colors.red,
           ),
@@ -114,7 +114,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -122,7 +122,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
             BoxShadow(
               color: Colors.blue.withOpacity(0.1),
               blurRadius: 20,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
           ],
         ),
@@ -143,12 +143,12 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(Icons.close, color: Colors.grey),
+                  icon: const Icon(Icons.close, color: Colors.grey),
                   splashRadius: 20,
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Search Bar
             Container(
@@ -159,7 +159,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                   BoxShadow(
                     color: Colors.blue.withOpacity(0.05),
                     blurRadius: 10,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
@@ -170,12 +170,12 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                   hintStyle: TextStyle(color: Colors.blue[200]),
                   prefixIcon: Icon(Icons.search, color: Colors.blue[300]),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
                 onChanged: _filterUsers,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Users List
             Container(
@@ -192,7 +192,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                       size: 48,
                       color: Colors.blue[200],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       'No users found',
                       style: TextStyle(
@@ -209,7 +209,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                 itemBuilder: (context, index) {
                   final user = filteredUsers[index];
                   return Container(
-                    margin: EdgeInsets.only(bottom: 8),
+                    margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -221,12 +221,12 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                         BoxShadow(
                           color: Colors.blue.withOpacity(0.05),
                           blurRadius: 10,
-                          offset: Offset(0, 5),
+                          offset: const Offset(0, 5),
                         ),
                       ],
                     ),
                     child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 8,
                       ),
@@ -237,7 +237,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                             BoxShadow(
                               color: Colors.blue.withOpacity(0.1),
                               blurRadius: 8,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
@@ -307,7 +307,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Cancel Button
             Container(
@@ -315,7 +315,7 @@ class _UserSelectionDialogState extends State<_UserSelectionDialog> {
               child: TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),

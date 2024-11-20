@@ -5,7 +5,6 @@ import 'Account Section/AcccountScreen.dart';
 import 'voiceRoom/groups.dart';
 import 'chat/chat_&_calling.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'chat/Status.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userId;
@@ -38,10 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Initialize _widgetOptions with required data
       _widgetOptions = [
-        ChatScreen1(),
+        const ChatScreen1(),
         GroupsScreen(),
         GameScreen(),
-        AccountScreen(),
+        const AccountScreen(),
       ];
     });
   }
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: _widgetOptions != null
             ? _widgetOptions.elementAt(_selectedIndex)
-            : CircularProgressIndicator(),
+            : const CircularProgressIndicator(),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -66,31 +65,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding:  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GNav(
               rippleColor: Colors.grey[300]!,
               hoverColor: Colors.grey[100]!,
               gap: 8,
               activeColor: Colors.blue[700],
               iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: Duration(milliseconds: 400),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: const Duration(milliseconds: 400),
               tabBackgroundColor: Colors.blue[50]!,
               color: Colors.black,
               tabs: [
-                GButton(
+                const GButton(
                   icon: LineIcons.comments,
                   text: 'Chat',
                 ),
-                GButton(
+                const GButton(
                   icon: LineIcons.users,
                   text: 'Rooms',
                 ),
-                GButton(
+                const GButton(
                   icon: LineIcons.gamepad,
                   text: 'Game',
                 ),
-                GButton(
+                const GButton(
                   icon: LineIcons.user,
                   text: 'Account',
                 ),
@@ -207,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Game Screen'));
+    return const Center(child: Text('Game Screen'));
   }
 }
 

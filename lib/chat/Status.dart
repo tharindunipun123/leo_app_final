@@ -69,7 +69,7 @@ class _StatusPageState extends State<StatusPage> {
       final response = await http.get(
         Uri.parse('$baseUrl/api/collections/Status/records'),
       ).timeout(
-        Duration(seconds: 10),
+        const Duration(seconds: 10),
         onTimeout: () {
           throw Exception('Connection timeout');
         },
@@ -102,7 +102,7 @@ class _StatusPageState extends State<StatusPage> {
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.red,
-        duration: Duration(seconds: 5),
+        duration: const Duration(seconds: 5),
         action: SnackBarAction(
           label: 'Retry',
           textColor: Colors.white,
@@ -134,7 +134,7 @@ class _StatusPageState extends State<StatusPage> {
         controller: controller,
         caption: Text(
           status.caption,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             backgroundColor: Colors.black54,
             fontSize: 17,
@@ -151,7 +151,7 @@ class _StatusPageState extends State<StatusPage> {
         controller: controller,
         caption: Text(
           status.caption,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             backgroundColor: Colors.black54,
             fontSize: 17,
@@ -168,10 +168,10 @@ class _StatusPageState extends State<StatusPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Status"),
+        title: const Text("Status"),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: () {
               setState(() {
                 isLoading = true;
@@ -181,11 +181,11 @@ class _StatusPageState extends State<StatusPage> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () async {
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddStatusScreen()),
+                MaterialPageRoute(builder: (context) => const AddStatusScreen()),
               );
               if (result == true) {
                 setState(() {
@@ -198,17 +198,17 @@ class _StatusPageState extends State<StatusPage> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : hasError
           ? Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Error loading statuses',
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -217,13 +217,13 @@ class _StatusPageState extends State<StatusPage> {
                 });
                 fetchStatuses();
               },
-              child: Text('Retry'),
+              child: const Text('Retry'),
             ),
           ],
         ),
       )
           : statuses.isEmpty
-          ? Center(child: Text('No statuses yet'))
+          ? const Center(child: Text('No statuses yet'))
           : RefreshIndicator(
         onRefresh: () async {
           await fetchStatuses();
@@ -233,7 +233,7 @@ class _StatusPageState extends State<StatusPage> {
           itemBuilder: (context, index) {
             final status = statuses[index];
             return Card(
-              margin: EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               child: ListTile(
                 leading: status.statusImage != null
                     ? ClipRRect(
@@ -248,7 +248,7 @@ class _StatusPageState extends State<StatusPage> {
                         width: 50,
                         height: 50,
                         color: Colors.grey[300],
-                        child: Icon(Icons.error),
+                        child: const Icon(Icons.error),
                       );
                     },
                   ),
@@ -259,7 +259,7 @@ class _StatusPageState extends State<StatusPage> {
                   'Posted ${_formatTimeAgo(status.created)}',
                 ),
                 trailing: status.statusVideo != null
-                    ? Icon(Icons.play_circle_outline)
+                    ? const Icon(Icons.play_circle_outline)
                     : null,
                 onTap: () {
                   Navigator.push(

@@ -87,7 +87,7 @@ class ZegoMp4PlayerWidgetState extends State<ZegoMp4PlayerWidget> with SingleTic
                   widget.textStyle ?? TextStyle(fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.bold),
             ),
           )
-        : const SizedBox.shrink();
+        :  const SizedBox.shrink();
 
     if (displaySize.width < MediaQuery.of(context).size.width) {
       /// width < 1/2

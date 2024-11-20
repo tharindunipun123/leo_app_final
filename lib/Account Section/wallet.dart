@@ -124,7 +124,7 @@ class _WalletScreenState extends material.State<WalletScreen> {
             material.Column(
               children: [
                 material.Container(
-                  margin: const material.EdgeInsets.only(top: 46, right: 46),
+                  margin:  const material.EdgeInsets.only(top: 46, right: 46),
                   height: 200,
                   child: material.Stack(
                     children: [
@@ -197,18 +197,18 @@ class _WalletScreenState extends material.State<WalletScreen> {
                           material.Colors.blue.shade800,
                         ],
                       ),
-                      borderRadius: material.BorderRadius.vertical(
+                      borderRadius: const material.BorderRadius.vertical(
                           top: material.Radius.circular(30)),
                     ),
                     child: material.Column(
                       crossAxisAlignment: material.CrossAxisAlignment.start,
                       children: [
                         const material.SizedBox(height: 16),
-                        material.Row(
+                        const material.Row(
                           mainAxisAlignment:
                           material.MainAxisAlignment.spaceBetween,
                           children: [
-                            const material.Text(
+                            material.Text(
                               'Recharge Channel',
                               style: material.TextStyle(
                                 fontSize: 18,
@@ -217,7 +217,7 @@ class _WalletScreenState extends material.State<WalletScreen> {
                               ),
                             ),
                             material.Row(
-                              children: const [
+                              children: [
                                 material.Text('Saudi Arabia',
                                     style: material.TextStyle(
                                         color: material.Colors.white)),
@@ -268,7 +268,7 @@ class _WalletScreenState extends material.State<WalletScreen> {
       child: material.Column(
         crossAxisAlignment: material.CrossAxisAlignment.start,
         children: [
-          material.Text(
+          const material.Text(
             'Balance',
             style: material.TextStyle(
               fontSize: 32,
@@ -276,10 +276,10 @@ class _WalletScreenState extends material.State<WalletScreen> {
               color: material.Colors.white,
             ),
           ),
-          material.SizedBox(height: 8),
+          const material.SizedBox(height: 8),
           material.Text(
             diamondAmount.toString(),
-            style: material.TextStyle(
+            style: const material.TextStyle(
               fontSize: 32,
               fontWeight: material.FontWeight.bold,
               color: material.Colors.white,
@@ -308,7 +308,7 @@ class _WalletScreenState extends material.State<WalletScreen> {
         },
         title: material.Text(
           name,
-          style: material.TextStyle(color: material.Colors.blue),
+          style: const material.TextStyle(color: material.Colors.blue),
         ),
         secondary: material.Image.asset(asset, width: 40),
         activeColor: material.Colors.blue,

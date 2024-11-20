@@ -9,7 +9,7 @@ void showGiftListSheet(BuildContext context) {
     backgroundColor: Colors.black.withOpacity(0.8),
     context: context,
     useRootNavigator: true,
-    shape: const RoundedRectangleBorder(
+    shape:  const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(32.0),
         topRight: Radius.circular(32.0),

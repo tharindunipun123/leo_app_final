@@ -34,7 +34,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding:  const EdgeInsets.all(24.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -49,7 +49,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           'Enter your phone number',
                           style: TextStyle(
@@ -58,7 +58,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             color: Colors.blue[700],
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           'We\'ll send you a verification code',
                           style: TextStyle(
@@ -66,7 +66,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             color: Colors.blue[600],
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           children: [
                             GestureDetector(
@@ -83,27 +83,27 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                 );
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(
                                   children: [
-                                    Text(_selectedCountryFlag, style: TextStyle(fontSize: 24)),
-                                    SizedBox(width: 8),
-                                    Text(_selectedCountryCode, style: TextStyle(fontSize: 16)),
-                                    Icon(Icons.arrow_drop_down),
+                                    Text(_selectedCountryFlag, style: const TextStyle(fontSize: 24)),
+                                    const SizedBox(width: 8),
+                                    Text(_selectedCountryCode, style: const TextStyle(fontSize: 16)),
+                                    const Icon(Icons.arrow_drop_down),
                                   ],
                                 ),
                               ),
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: TextField(
                                 controller: _phoneController,
                                 keyboardType: TextInputType.phone,
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                                 decoration: InputDecoration(
                                   hintText: 'Phone Number',
                                   filled: true,
@@ -117,12 +117,12 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                             ),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Center(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue[700],
-                              padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -188,26 +188,26 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                                   } else {
                                     // Display error if OTP failed to send
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Failed to send OTP. Please try again.')),
+                                      const SnackBar(content: Text('Failed to send OTP. Please try again.')),
                                     );
                                   }
                                 } else {
                                   // Handle non-200 response
                                   print('Failed to send OTP. Status code: ${response.statusCode}');
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('Failed to send OTP. Please try again later.')),
+                                    const SnackBar(content: Text('Failed to send OTP. Please try again later.')),
                                   );
                                 }
                               } catch (e) {
                                 // Handle exceptions
                                 print('Error occurred while sending OTP: $e');
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('An error occurred. Please try again later.')),
+                                  const SnackBar(content: Text('An error occurred. Please try again later.')),
                                 );
                               }
                             },
 
-                            child: Text(
+                            child: const Text(
                               'Next',
                               style: TextStyle(fontSize: 18, color: Colors.white),
                             ),

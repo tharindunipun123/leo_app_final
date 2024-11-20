@@ -104,7 +104,7 @@ class _OtpScreenState extends State<OtpScreen> {
     } catch (e) {
       print('Error updating phone number: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Failed to update phone number. Please try again.'),
           backgroundColor: Colors.red,
         ),
@@ -147,7 +147,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           'Enter verification code',
                           style: TextStyle(
@@ -156,7 +156,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             color: Colors.blue[700],
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           'We\'ve sent a code to ${widget.phoneNumber}',
                           style: TextStyle(
@@ -164,7 +164,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             color: Colors.blue[600],
                           ),
                         ),
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: List.generate(
@@ -176,7 +176,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 focusNode: _focusNodes[index],
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.grey[200],
@@ -198,7 +198,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
                         Center(
                           child: TextButton(
                             onPressed: () {
@@ -211,12 +211,12 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Center(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue[700],
-                              padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -227,11 +227,11 @@ class _OtpScreenState extends State<OtpScreen> {
                                 updatePhoneNumber();
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Invalid OTP. Please try again.')),
+                                  const SnackBar(content: Text('Invalid OTP. Please try again.')),
                                 );
                               }
                             },
-                            child: Text(
+                            child: const Text(
                               'Verify',
                               style: TextStyle(fontSize: 18, color: Colors.white),
                             ),

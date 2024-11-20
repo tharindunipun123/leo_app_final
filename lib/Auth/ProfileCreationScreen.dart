@@ -85,7 +85,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Create Profile',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -114,7 +114,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                       : null,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 'Upload Profile Photo',
                 style: TextStyle(
@@ -123,7 +123,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                   color: Colors.grey[600],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               TextField(
                 controller: _firstNameController,
                 decoration: InputDecoration(
@@ -133,13 +133,13 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   prefixIcon: Icon(Icons.person, color: Colors.blue[700]),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _lastNameController,
                 decoration: InputDecoration(
@@ -149,23 +149,23 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: const BorderSide(color: Colors.blue),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   prefixIcon: Icon(Icons.person_outline, color: Colors.blue[700]),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: saveProfile,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                   backgroundColor: Colors.blue[700],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Save Profile',
                   style: TextStyle(
                     fontSize: 18,

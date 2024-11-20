@@ -40,7 +40,7 @@ class _AddStatusScreenState extends State<AddStatusScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.image),
+                leading:  const Icon(Icons.image),
                 title: const Text('Image'),
                 onTap: () => Navigator.pop(context, false),
               ),

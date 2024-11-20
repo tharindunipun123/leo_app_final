@@ -138,27 +138,27 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreateRoom,
         backgroundColor: Colors.blue,
-        child: Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
   Widget _buildSearchBar() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       color: Colors.lightBlue[50],
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
           hintText: 'Search voice rooms...',
-          prefixIcon: Icon(Icons.search, color: Colors.blue),
+          prefixIcon: const Icon(Icons.search, color: Colors.blue),
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide.none,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
       ),
     );
@@ -167,10 +167,10 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
   Widget _buildAdvertBanner() {
     return Container(
       height: 100,
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
+        image: const DecorationImage(
           image: NetworkImage('https://picsum.photos/800/200'),
           fit: BoxFit.cover,
         ),
@@ -200,12 +200,12 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
             color: Colors.blue[700],
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           children: List.generate(
             3,
                 (index) => Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
               child: CircleAvatar(
                 radius: 15,
                 backgroundImage: NetworkImage('https://picsum.photos/50/50?random=$index'),
@@ -219,7 +219,7 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
 
   Widget _buildVoiceRoomsList(bool isMineTab) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator(color: Colors.blue));
+      return const Center(child: CircularProgressIndicator(color: Colors.blue));
     }
 
     final filteredRooms = isMineTab
@@ -227,7 +227,7 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
         : _voiceRooms;
 
     return ListView.builder(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       itemCount: filteredRooms.length,
       itemBuilder: (context, index) => _buildRoomCard(filteredRooms[index]),
     );
@@ -235,7 +235,7 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
 
   Widget _buildRoomCard(VoiceRoom room) {
     return Card(
-      margin: EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
@@ -243,7 +243,7 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               child: CachedNetworkImage(
                 imageUrl: 'http://145.223.21.62:8090/api/files/voiceRooms/${room.id}/${room.groupPhoto}',
                 height: 150,
@@ -252,17 +252,17 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
                 placeholder: (context, url) => Container(
                   height: 150,
                   color: Colors.grey[200],
-                  child: Center(child: CircularProgressIndicator(color: Colors.blue)),
+                  child: const Center(child: CircularProgressIndicator(color: Colors.blue)),
                 ),
                 errorWidget: (context, url, error) => Container(
                   height: 150,
                   color: Colors.grey[200],
-                  child: Icon(Icons.error, color: Colors.blue),
+                  child: const Icon(Icons.error, color: Colors.blue),
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -271,22 +271,22 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
                     children: [
                       Text(
                         room.voiceRoomName,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      Text('ID: ${room.voiceRoomId}'),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  Text('ID: ${room.voiceRoomId}',overflow: TextOverflow.ellipsis,),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      Icon(Icons.location_on, size: 16, color: Colors.blue),
-                      SizedBox(width: 4),
+                      const Icon(Icons.location_on, size: 16, color: Colors.blue),
+                      const SizedBox(width: 4),
                       Text(room.voiceRoomCountry),
-                      Spacer(),
+                      const Spacer(),
                       _buildTags(room.tags),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     room.teamMoto,
                     style: TextStyle(color: Colors.grey[600]),
@@ -305,8 +305,8 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
     return Row(
       children: tagsList.map((tag) =>
           Container(
-            margin: EdgeInsets.only(left: 4),
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            margin: const EdgeInsets.only(left: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.lightBlue[100],
               borderRadius: BorderRadius.circular(12),

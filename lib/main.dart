@@ -82,7 +82,7 @@ class ZIMKitDemoHomePage extends StatelessWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Conversations'),
+          title:  const Text('Conversations'),
           actions: const [HomePagePopupMenuButton()],
         ),
         body: ZIMKitConversationListView(

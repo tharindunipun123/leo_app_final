@@ -6,7 +6,7 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -34,7 +34,7 @@ class StartScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Welcome to Leo Chat',
                       style: TextStyle(
                         fontSize: 28,
@@ -42,8 +42,8 @@ class StartScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Connect with friends and family securely',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -51,11 +51,11 @@ class StartScreen extends StatelessWidget {
                         color: Colors.white70,
                       ),
                     ),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.teal[700], backgroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -66,7 +66,7 @@ class StartScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => PhoneNumberScreen()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'Get Started',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
                       ),
@@ -74,8 +74,8 @@ class StartScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   '© 2024 Leo Chat',
                   style: TextStyle(color: Colors.white70),

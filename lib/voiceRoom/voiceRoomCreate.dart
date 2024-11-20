@@ -175,7 +175,7 @@ class _CreateVoiceRoomPageState extends State<CreateVoiceRoomPage> {
     String? helperText,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding:  const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
@@ -188,7 +188,7 @@ class _CreateVoiceRoomPageState extends State<CreateVoiceRoomPage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.blue, width: 2),
+            borderSide: const BorderSide(color: Colors.blue, width: 2),
           ),
           filled: true,
           fillColor: Colors.blue.shade50,

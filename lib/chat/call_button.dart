@@ -14,7 +14,7 @@ List<Widget> buildCallButtons(
   return [
     // Video Call Button
     ZegoSendCallInvitationButton(
-      iconSize: const Size(40, 40),
+      iconSize:  const Size(40, 40),
       buttonSize: const Size(50, 50),
       isVideoCall: true,
       resourceID: 'zego_data',

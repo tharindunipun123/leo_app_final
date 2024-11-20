@@ -100,7 +100,7 @@ class ZegoSvgaPlayerWidgetState extends State<ZegoSvgaPlayerWidget>
       valueListenable: loadedNotifier,
       builder: (context, isLoaded, _) {
         if (!isLoaded) {
-          return const Center(
+          return  const Center(
             child: CircularProgressIndicator(
               color: Colors.red,
             ),
