@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
-        android:label="leo_app_01"
+        android:label="Leo Chat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -76,7 +76,7 @@ class ChatScreen1State extends State<ChatScreen1> with SingleTickerProviderState
               : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall();
 
           config.audioVideoViewConfig
-            ..useVideoViewAspectFill = true;
+            .useVideoViewAspectFill = true;
 
           return config;
         },
@@ -153,6 +153,7 @@ class ChatScreen1State extends State<ChatScreen1> with SingleTickerProviderState
           ),
         );
       },
+
     );
   }
 
@@ -200,12 +201,12 @@ class ChatScreen1State extends State<ChatScreen1> with SingleTickerProviderState
                 fontSize: 24,
               ),
             ),
-            actions: [
+            actions: const [
               // IconButton(
               //   icon: Icon(Icons.search, color: Colors.blue[700]),
               //   onPressed: () {},
               // ),
-              const HomePagePopupMenuButton(),
+              HomePagePopupMenuButton(),
             ],
             bottom: TabBar(
               controller: _tabController,
