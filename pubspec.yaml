@@ -120,6 +120,7 @@ flutter:
     - assets/images1/
     - assets/avatars/
     - assets/gift1/
+    - assets/images/logo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

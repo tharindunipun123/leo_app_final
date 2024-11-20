@@ -25,6 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _widgetOptions = [
+      const ChatScreen1(),
+      GroupsScreen(),
+      GameScreen(),
+      const AccountScreen(),
+    ];
     _loadUserData();
   }
 
@@ -35,13 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       username = prefs.getString('firstName') ?? widget.username;
       userId = prefs.getString('userId') ?? widget.userId;
 
-      // Initialize _widgetOptions with required data
-      _widgetOptions = [
-        const ChatScreen1(),
-        GroupsScreen(),
-        GameScreen(),
-        const AccountScreen(),
-      ];
+
     });
   }
 

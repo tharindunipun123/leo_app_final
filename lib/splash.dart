@@ -53,11 +53,13 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
     // Start animations sequence
     _startAnimationSequence();
-
+    start();
     // Check shared preferences after animations
-    Future.delayed(const Duration(seconds: 3), () {
-      checkUserData();
-    });
+
+  }
+  Future<void> start() async {
+   await  Future.delayed(const Duration(seconds: 3));
+    checkUserData();
   }
 
   void _startAnimationSequence() async {
@@ -89,6 +91,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           builder: (context) => HomeScreen(
             userId: userId,
             username: firstname,
+
           ),
         ),
       );
@@ -161,7 +164,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         const SizedBox(height: 30),
                         // App Name with custom font
                         Text(
-                          'Your App Name',
+                          'Leo Chat',
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

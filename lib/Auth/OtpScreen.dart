@@ -190,10 +190,17 @@ class _OtpScreenState extends State<OtpScreen> {
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
                                 onChanged: (value) {
+
                                   if (value.length == 1 && index < 5) {
                                     FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
                                   }
                                 },
+                                onTap: () {
+                                  print('aaa');
+                                  _focusNodes[index].requestFocus();
+                                  FocusScope.of(context).requestFocus(_focusNodes[index]);
+                                },
+
                               ),
                             ),
                           ),
