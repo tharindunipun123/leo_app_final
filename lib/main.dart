@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leo_app_01/StartScreen.dart';
+import 'package:leo_app_01/splash.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
 import 'package:flutter/cupertino.dart';
 import 'chat/default_dialogs.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ZEGOCLOUD Chat App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: StartScreen(),
+      home: SplashScreen(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'HomeScreen.dart';
+import 'package:zego_zimkit/zego_zimkit.dart';
 import 'StartScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -65,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     ));
   }
 
+
   void _startAnimationSequence() async {
     await Future.wait([
       _fadeController.forward(),
@@ -84,6 +86,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     if (!mounted) return;
 
     if (userId != null && firstname != null) {
+      ZIMKit().connectUser(id: userId, name: firstname);
       // User is logged in, navigate to HomeScreen
       Navigator.pushReplacement(
         context,
